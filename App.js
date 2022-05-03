@@ -2,10 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import {
   Button,
   StyleSheet,
-  Text,
   View,
-  TextInput,
-  ScrollView,
   FlatList,
 } from 'react-native';
 import React, { useState } from 'react';
@@ -15,12 +12,14 @@ import ReminderInput from './components/ReminderInput';
 
 export default function App() {
   const [reminders, setReminders] = useState([]);
+  const [isAddMode, setIsAddMode] = useState(false);
 
   const addReminderHandler = (reminderTitle) => {
     setReminders((reminder) => [
       ...reminder,
       { key: Math.random().toString(), value: reminderTitle },
     ]);
+    setIsAddMode(false)
   };
   const deleteReminder = (reminderId) => {
     setReminders((currentReminders) => {
@@ -31,7 +30,8 @@ export default function App() {
 
   return (
     <View style={styles.body}>
-      <ReminderInput onAddReminder={addReminderHandler} />
+      <Button title="Add New Reminder" onPress={() => setIsAddMode(true)} />
+      <ReminderInput visible = {isAddMode} onAddReminder={addReminderHandler} />
       <FlatList
         data={reminders}
         renderItem={(itemData) => (
