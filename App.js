@@ -1,20 +1,53 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  FlatList,
+} from 'react-native';
+import React, { useState } from 'react';
+
+import ReminderItem from './components/ReminderItem';
+import ReminderInput from './components/ReminderInput';
 
 export default function App() {
+  const [reminders, setReminders] = useState([]);
+
+  const addReminderHandler = (reminderTitle) => {
+    setReminders((reminder) => [
+      ...reminder,
+      { key: Math.random().toString(), value: reminderTitle },
+    ]);
+  };
+  const deleteReminder = (reminderId) => {
+    setReminders((currentReminders) => {
+      return currentReminders.filter((reminder) => reminder.key !== reminderId);
+    });
+  };
+
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={styles.body}>
+      <ReminderInput onAddReminder={addReminderHandler} />
+      <FlatList
+        data={reminders}
+        renderItem={(itemData) => (
+          <ReminderItem
+            id={itemData.item.key}
+            title={itemData.item.value}
+            onDelete={deleteReminder}
+          />
+        )}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  body: {
+    padding: 30,
   },
 });
