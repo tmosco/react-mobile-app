@@ -27,11 +27,16 @@ export default function App() {
     });
   };
 
+  const cancelReminderHandler = () =>{
+    setIsAddMode(false)
+
+  }
+
 
   return (
     <View style={styles.body}>
       <Button title="Add New Reminder" onPress={() => setIsAddMode(true)} />
-      <ReminderInput visible = {isAddMode} onAddReminder={addReminderHandler} />
+      <ReminderInput visible = {isAddMode} onAddReminder={addReminderHandler} cancelButton={cancelReminderHandler} />
       <FlatList
         data={reminders}
         renderItem={(itemData) => (
